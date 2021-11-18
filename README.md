@@ -6,3 +6,6 @@
 20191604 백연선
 GitHub : https://github.com/BaekYeonSun
 ```
+20212999 박재우
+GitHub : https://github.com/JW0705
+```
