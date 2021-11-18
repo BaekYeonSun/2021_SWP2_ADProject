@@ -9,3 +9,7 @@ GitHub : https://github.com/BaekYeonSun
 20212999 박재우
 GitHub : https://github.com/JW0705
 ```
+```
+20212997 박시윤
+Github : https://github.com/tldbs0420
+```
