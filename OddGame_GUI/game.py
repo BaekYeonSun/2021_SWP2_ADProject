@@ -1,3 +1,5 @@
+import sys
+
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -8,6 +10,8 @@ from PyQt5.QtGui import QPixmap
 from player import Player
 from opponent import Opponent
 from showMarble import ShowMarble
+
+from pygame import mixer
 
 class OddGame(QWidget):
 
@@ -107,6 +111,16 @@ class OddGame(QWidget):
         self.ableToBet = False  # 구슬 걸기 버튼을 막 눌러서 생기는 오류 방지. True일 때만 버튼이 작동한다.
         self.ableToOdd = False  # 홀/짝 버튼을 막 눌러서 생기는 오류 방지. True일 때만 버튼이 작동한다.
 
+        mixer.init()
+        self.getMarbleSound = mixer.Sound("Sound/getMarble.mp3")  # 구슬 얻는 효과음
+        self.getMarbleSound.set_volume(0.5)
+        self.loseMarbleSound = mixer.Sound("Sound/loseMarble.mp3")  # 구슬 잃는 효과음
+        self.loseMarbleSound.set_volume(0.5)
+        self.winSound = mixer.Sound("Sound/win.mp3")  # 승리 효과음
+        self.winSound.set_volume(0.4)
+        self.loseSound = mixer.Sound("Sound/lose.mp3")  # 패배 효과음
+        self.loseSound.set_volume(0.4)
+
         self.player = Player()
         self.opponent = Opponent()
         self.showMarble = ShowMarble()
@@ -151,10 +165,12 @@ class OddGame(QWidget):
                         self.log.append("이겼다! 구슬 "+str(self.player.getBetCount())+"개를 얻었다!")
                         self.player.winMarble(self.player.getBetCount())
                         self.opponent.loseMarble(self.player.getBetCount())
+                        self.getMarbleSound.play()  # 구슬 얻는 효과음 재생
                     else:
                         self.log.append("졌다... 구슬 "+str(self.player.getBetCount())+"개를 잃었다...")
                         self.player.loseMarble(self.player.getBetCount())
                         self.opponent.winMarble(self.player.getBetCount())
+                        self.loseMarbleSound.play()  # 구슬 잃는 효과음 재생
                     self.sleep(2)
 
                     self.player.switchTurn()
@@ -185,10 +201,12 @@ class OddGame(QWidget):
                         self.log.append("졌다... 구슬 " + str(self.opponent.getBetCount()) + "개를 잃었다...")
                         self.player.loseMarble(self.opponent.getBetCount())
                         self.opponent.winMarble(self.opponent.getBetCount())
+                        self.loseMarbleSound.play()  # 구슬 잃는 효과음 재생
                     else:
                         self.log.append("이겼다! 구슬 " + str(self.opponent.getBetCount()) + "개를 얻었다!")
                         self.player.winMarble(self.opponent.getBetCount())
                         self.opponent.loseMarble(self.opponent.getBetCount())
+                        self.getMarbleSound.play()  # 구슬 얻는 효과음 재생
                     self.sleep(2)
 
                     self.player.switchTurn()
@@ -200,11 +218,13 @@ class OddGame(QWidget):
                 self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showWin()))
                 self.playerShow[0].setText("20")
                 self.opponentShow[0].setText("0")
+                self.winSound.play()  # 승리 효과음 재생
             elif self.player.getCount()<=0:
                 self.log.append("=====    패배    =====")
                 self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showLose()))
                 self.playerShow[0].setText("0")
                 self.opponentShow[0].setText("20")
+                self.loseSound.play()  # 패배 효과음 재생
 
 
 
@@ -233,9 +253,13 @@ class OddGame(QWidget):
             self.runGame()
 
 if __name__ == '__main__':
-    import sys
 
     app = QApplication(sys.argv)
     game = OddGame()
     game.show()
+
+    backGroundMusic = mixer.Sound("Sound/backgroundmusic.mp3")  # bgm 불러오기
+    backGroundMusic.set_volume(0.3)
+    backGroundMusic.play(-1)  # bgm 재생
+
     sys.exit(app.exec_())
