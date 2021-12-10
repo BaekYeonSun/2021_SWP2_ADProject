@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWidgets import QLayout, QGridLayout, QHBoxLayout, QVBoxLayout
 from PyQt5.QtWidgets import QTextEdit, QLineEdit, QPushButton, QLabel
+from PyQt5.QtGui import QPixmap
 
 from player import Player
 from opponent import Opponent
@@ -46,12 +47,9 @@ class OddGame(QWidget):
             self.opponentShow[i].setFixedWidth(50)
             gameLayout[0].addWidget(self.opponentShow[i])
 
-        self.showMarblePlace = QTextEdit()  # 주먹 속 구슬을 보여줄 곳
-        self.showMarblePlace.setReadOnly(True)
-        self.showMarblePlace.setAlignment(Qt.AlignVCenter)
-        font = self.showMarblePlace.font()
-        font.setPointSize(font.pointSize() + 50)
-        self.showMarblePlace.setFont(font)
+        self.showMarblePlace = QLabel()  # 주먹 속 구슬을 보여줄 곳
+        self.showMarblePlace.setAlignment(Qt.AlignCenter)
+        self.showMarblePlace.resize(300,200)
 
         for i in range(len(textList)):  # 플레이어의 구슬 상태 등을 표시
             playerStatusLabel = QLabel(textList[i])
@@ -120,7 +118,7 @@ class OddGame(QWidget):
         self.runGame()
 
     def resetInterface(self):  # 남은 구슬 개수 갱신 및 입력칸을 빈칸으로 초기화
-        self.showMarblePlace.setPlaceholderText(" ")
+        self.showMarblePlace.setPixmap(QPixmap(self.showMarble.imageList[6]))
         self.opponentShow[0].setText(str(self.opponent.getCount()))
         self.opponentShow[1].setText('...')
         self.opponentShow[2].setText('...')
@@ -148,7 +146,7 @@ class OddGame(QWidget):
                     self.log.append("상대가 주먹을 연다.")
                     self.sleep(1)
 
-                    self.showMarblePlace.setPlaceholderText(self.showMarble.showMarble(self.opponent.getBetCount()))
+                    self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showMarble(self.opponent.getBetCount())))
                     if self.player.checkAnswerIsOdd() == (self.opponent.getBetCount() % 2 == 1):
                         self.log.append("이겼다! 구슬 "+str(self.player.getBetCount())+"개를 얻었다!")
                         self.player.winMarble(self.player.getBetCount())
@@ -175,7 +173,7 @@ class OddGame(QWidget):
                     self.log.append("주먹에 구슬을 몇개 넣을까?")
                     self.ableToBet = True
                 else:  # 모든 입력이 끝나면
-                    self.showMarblePlace.setPlaceholderText(self.showMarble.showMarble(self.player.getBetCount()))
+                    self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showMarble(self.player.getBetCount())))
                     self.sleep(1)
 
                     self.opponent.setAnswer()
@@ -199,12 +197,12 @@ class OddGame(QWidget):
         else:  # 승부가 날 경우
             if self.player.getCount()>=20:
                 self.log.append("*****    승리    *****")
-                self.showMarblePlace.setPlaceholderText("You Win!")
+                self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showWin()))
                 self.playerShow[0].setText("20")
                 self.opponentShow[0].setText("0")
             elif self.player.getCount()<=0:
                 self.log.append("=====    패배    =====")
-                self.showMarblePlace.setPlaceholderText("You Lose...")
+                self.showMarblePlace.setPixmap(QPixmap(self.showMarble.showLose()))
                 self.playerShow[0].setText("0")
                 self.opponentShow[0].setText("20")
 

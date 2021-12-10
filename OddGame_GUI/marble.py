@@ -3,7 +3,6 @@ class Marble:
     def __init__(self):
         self.count = 10
         self.betCount = 0
-        self.isOdd = False
         self.answer = ''
 
     def loseMarble(self, count):

@@ -4,7 +4,6 @@ from marble import Marble
 class Opponent(Marble):
     def __init__(self):
         super().__init__()
-        self.difficulty = 'human'
 
     def setBetCount(self):  # 구슬 개수 랜덤 결정
         if self.getCount() < 6:
