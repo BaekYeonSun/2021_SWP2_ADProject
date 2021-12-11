@@ -4,7 +4,7 @@ from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWidgets import QLayout, QGridLayout, QHBoxLayout, QVBoxLayout
-from PyQt5.QtWidgets import QTextEdit, QLineEdit, QPushButton, QLabel
+from PyQt5.QtWidgets import QTextEdit, QLineEdit, QPushButton, QLabel, QFrame
 from PyQt5.QtGui import QPixmap
 
 from player import Player
@@ -43,6 +43,13 @@ class OddGame(QWidget):
         font.setPointSize(font.pointSize() + 20)
         opponentLabel.setFont(font)
         opponentLabel.setAlignment(Qt.AlignCenter)
+
+        playerLabel = QLabel('플레이어')  # 아래가 플레이어의 상태임일 나타내주기 위한 라벨
+        font = playerLabel.font()
+        font.setBold(True)
+        font.setPointSize(font.pointSize() + 20)
+        playerLabel.setFont(font)
+        playerLabel.setAlignment(Qt.AlignCenter)
 
         for i in range(len(textList)):  # 상대의 구슬 상태 등을 표시
             opponentStatusLabel = QLabel(textList[i])
@@ -86,6 +93,7 @@ class OddGame(QWidget):
         for layout in gameLayout:
             if layout == gameLayout[1]:
                 leftLayout.addWidget(self.showMarblePlace)
+                leftLayout.addWidget(playerLabel)
             leftLayout.addLayout(layout)
 
         self.log = QTextEdit()  # 게임 진행 로그
