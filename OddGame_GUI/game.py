@@ -17,6 +17,7 @@ class OddGame(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        mixer.init()
 
         # 레이아웃 사전 준비
         textList = ['남은 구슬 : ', '건 구슬 : ', '홀/짝 : ']
@@ -105,13 +106,17 @@ class OddGame(QWidget):
 
         self.setLayout(mainLayout)
         self.setWindowTitle('Odd Game')
+
+        backGroundMusic = mixer.Sound("Sound/backgroundmusic.mp3")  # bgm 불러오기
+        backGroundMusic.set_volume(0.3)
+        backGroundMusic.play(-1)  # bgm 재생
+
         self.startGame()
 
     def startGame(self):  # 새 게임 시작
         self.ableToBet = False  # 구슬 걸기 버튼을 막 눌러서 생기는 오류 방지. True일 때만 버튼이 작동한다.
         self.ableToOdd = False  # 홀/짝 버튼을 막 눌러서 생기는 오류 방지. True일 때만 버튼이 작동한다.
 
-        mixer.init()
         self.getMarbleSound = mixer.Sound("Sound/getMarble.mp3")  # 구슬 얻는 효과음
         self.getMarbleSound.set_volume(0.5)
         self.loseMarbleSound = mixer.Sound("Sound/loseMarble.mp3")  # 구슬 잃는 효과음
@@ -257,9 +262,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = OddGame()
     game.show()
-
-    backGroundMusic = mixer.Sound("Sound/backgroundmusic.mp3")  # bgm 불러오기
-    backGroundMusic.set_volume(0.3)
-    backGroundMusic.play(-1)  # bgm 재생
 
     sys.exit(app.exec_())
