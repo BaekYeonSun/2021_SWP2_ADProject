@@ -48,3 +48,7 @@
 + 1.4
     + /game.py
     + 배경음악 재생 위치 변경. (__main__에서 OddGame의 __init__으로)
+
++ 1.5
+    + /game.py
+    + GUI에 '플레이어'QLabel 추가
